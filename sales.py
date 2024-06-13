@@ -1,8 +1,8 @@
-import numpy as np
-import pandas as pd
 import streamlit as st
+import matplotlib
+matplotlib.use('Agg')  # Use Agg backend for non-interactive environments
 import matplotlib.pyplot as plt
-import seaborn as sns
+import pandas as pd
 
 # Load the data
 @st.cache_data
@@ -21,7 +21,7 @@ end_date = st.sidebar.date_input('End date', min_value=start_date, max_value=df[
 
 category = st.sidebar.multiselect('Categories', options=df['Category'].unique(), default=df['Category'].unique())
 
-courier_status = st.sidebar.multiselect('Courier Status', options=df['Courier Status'].dropna().unique(), default=df['Courier Status'].dropna().unique())
+courier_status = st.sidebar.multiselect('Courier Status', options=['Shipped','Unshipped'], default=['Shipped','Unshipped'])
 
 # Heading of the dashboard
 st.markdown(" # ***Amazon Sales Analysis - Dashboard***")
@@ -38,7 +38,7 @@ filtered = df[(df['Date'] >= pd.to_datetime(start_date)) & (df['Date'] <= pd.to_
 if category:
     filtered = filtered[filtered['Category'].isin(category)]
 if courier_status:
-    filtered = filtered[filtered['Courier Status'].isin(courier_status)]
+    filtered = filtered[filtered['Courier Status'].isin(['Shipped','Unshipped'])]
 
 ################################# Sales trend based on category ###############################################
 st.header('Sales Trend Based on Category')
